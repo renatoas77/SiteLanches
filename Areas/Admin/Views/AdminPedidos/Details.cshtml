@@ -1,0 +1,97 @@
+﻿@model LanchesMac.ViewModels.PedidoLancheViewModel
+
+@{
+    ViewData["Title"] = "Detalhes ";
+    decimal totalPedido = 0;
+    decimal totalItem = 0;
+}
+
+<h1>Detalhes do pedido</h1>
+
+<div class="row" style="font-size:150%;font-family: Verdana">
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Nome): @Html.DisplayFor(model => model.Pedido.Nome) </div>
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Sobrenome): @Html.DisplayFor(model => model.Pedido.Sobrenome)</div>
+</div>
+<br />
+<div class="row" style="font-size:150%;font-family: Verdana">
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Endereco1): @Html.DisplayFor(model => model.Pedido.Endereco1) </div>
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Endereco2): @Html.DisplayFor(model => model.Pedido.Endereco2)</div>
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Cep): @Html.DisplayFor(model => model.Pedido.Cep)</div>
+</div>
+<br />
+<div class="row" style="font-size:150%;font-family: Verdana">
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Estado): @Html.DisplayFor(model => model.Pedido.Estado) </div>
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Cidade): @Html.DisplayFor(model => model.Pedido.Cidade)</div>
+</div>
+<br />
+<div class="row" style="font-size:150%;font-family: Verdana">
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Telefone): @Html.DisplayFor(model => model.Pedido.Telefone) </div>
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.Email): @Html.DisplayFor(model => model.Pedido.Email)</div>
+</div>
+<br />
+<div class="row" style="font-size:150%;font-family: Verdana">
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.PedidoId): @Html.DisplayFor(model => model.Pedido.PedidoId) </div>
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.PedidoEnviado): @Html.DisplayFor(model => model.Pedido.PedidoEnviado) </div>
+    <div class="col-md-4">@Html.DisplayNameFor(model => model.Pedido.PedidoEntregueEm): @Html.DisplayFor(model => model.Pedido.PedidoEntregueEm)</div>
+</div>
+
+<br />
+
+<h2>Itens do pedido:</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            <h3>@Html.DisplayNameFor(mi => mi.Pedido.PedidoItens[0].Lanche)</h3>
+        </th>
+        <th>
+            <h3></h3>
+        </th>
+        <th>
+            <h3>@Html.DisplayNameFor(mi => mi.Pedido.PedidoItens[0].Preco)</h3>
+        </th>
+        <th>
+            <h3>@Html.DisplayNameFor(mi => mi.Pedido.PedidoItens[0].Quantidade)</h3>
+        </th>
+        <th>
+            <h3>Totais</h3>
+        </th>
+    </tr>
+    @foreach (var item in @Model.Pedido.PedidoItens)
+    {
+        totalPedido += (@item.Lanche.Preco * @item.Quantidade);
+        totalItem = (@item.Lanche.Preco * @item.Quantidade);
+
+        <tr>
+            <td>
+                <h3>@Html.DisplayFor(modelItem => item.Lanche.Nome)</h3>
+            </td>
+            <td>
+                <img src="@item.Lanche.ImagemThumbnailUrl" class="img-fluid" width="100" height="100">
+            </td>
+            <td>
+                <h3>
+                    @string.Format("{0:C}",item.Lanche.Preco)
+                </h3>
+            </td>
+            <td>
+                <h3>@Html.DisplayFor(modelItem => item.Quantidade)</h3>
+            </td>
+            <td>
+                <h3>Total do item: @string.Format("{0:C}",@totalItem)</h3>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td colspan="4">&nbsp;</td>
+        <td align="right">
+            <h3>Total do pedido: @string.Format("{0:C}",@totalPedido)</h3>
+        </td>
+    </tr>
+</table>
+
+<br />
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Pedido.PedidoId">Editar</a> |
+    <a asp-action="Index">Voltar a pedidos</a>
+</div>

@@ -1,0 +1,71 @@
+﻿@model LanchesMac.Models.Lanche
+
+@{
+    ViewData["Title"] = "Deyalhes ";
+}
+
+<h1>Detalhes</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Lanche
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+        <dt class="col-sm-2">
+            Breve descrição
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DescricaoCurta)
+        </dd>
+        <dt class="col-sm-2">
+            Descrição Detalhada
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DescricaoDetalhada)
+        </dd>
+        <dt class="col-sm-2">
+            Preço
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Preco)
+        </dd>
+        <dt class="col-sm-2">
+            Imagem Url
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.ImagemUrl" width="110" height="75" />
+        </dd>
+        <dt class="col-sm-2">
+            Thumbnail Url
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.ImagemThumbnailUrl" width="110" height="75" />
+        </dd>
+        <dt class="col-sm-2">
+            É preferido
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsLanchePreferido)
+        </dd>
+        <dt class="col-sm-2">
+            Em estoque
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmEstoque)
+        </dd>
+        <dt class="col-sm-2">
+            Categoria
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Categoria.CategoriaNome)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.LancheId">Editar</a> |
+    <a asp-action="Index">Voltar a lanches</a>
+</div>
