@@ -18,11 +18,17 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                   <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin</a>
-                   <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminLanches" asp-action="Index">Lanches</a>
-                   <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminCategorias" asp-action="Index">Categorias</a>
-                   <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminPedidos" asp-action="Index">Pedidos</a>
-                   @await Html.PartialAsync("_LoginPartial")
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin</a>
+                    &nbsp;    &nbsp;
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminLanches" asp-action="Index">Lanches</a>
+                    &nbsp;    &nbsp;
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminCategorias" asp-action="Index">Categorias</a>
+                    &nbsp;    &nbsp;
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminPedidos" asp-action="Index">Pedidos</a>
+                    &nbsp;    &nbsp; 
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminRelatorioVendas" asp-action="Index">Relatório de vendas</a>
+                    &nbsp;    &nbsp;
+                    @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
         </nav>
