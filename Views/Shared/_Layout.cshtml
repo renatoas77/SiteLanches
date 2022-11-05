@@ -13,31 +13,29 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Santos Lanches</a>
+                &nbsp;    &nbsp;
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin area</a>
+                }
+                &nbsp;    &nbsp;
+                @await Html.PartialAsync("_LoginPartial")
+                &nbsp;    &nbsp;
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    &nbsp;    &nbsp;
-                    @await Component.InvokeAsync("CarrinhoCompraResumo")
-                        &nbsp;    &nbsp;
                     @await Component.InvokeAsync("CategoriaMenu")
-                        &nbsp;    &nbsp;
-                    <a class="nav-link text-light" asp-area="" asp-controller="Contato" asp-action="Index">Contato</a>
-                        &nbsp;    &nbsp;
+                    &nbsp;    &nbsp;
                     <form class="navbar-form navbar-right" asp-controller="Lanche" asp-action="Search" method="get">
                         <div>
                             <input type="text" class="form-control" placeholder="Procurar produto" name="searchString" value="@ViewData["searchString"]">
                         </div>
                     </form>
-                        &nbsp;    &nbsp;
-                    @await Html.PartialAsync("_LoginPartial")
-                        &nbsp;    &nbsp;
-                    @if(User.IsInRole("Admin"))
-                    {
-                        <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin area</a>
-                    }
+                    &nbsp;    &nbsp;
+                    @await Component.InvokeAsync("CarrinhoCompraResumo")
+
                 </div>
             </div>
         </nav>
@@ -48,9 +46,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer>
         <div class="container">
-            &copy; 2022 - Santos Lanches
+            <a class="nav-link text-light" asp-area="" asp-controller="Contato" asp-action="Index"> &copy; 2022 - Santos Lanches - Contato</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

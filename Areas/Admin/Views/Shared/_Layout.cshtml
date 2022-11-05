@@ -13,22 +13,24 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Santos Lanches</a>
+                &nbsp;    &nbsp;
+                <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin area</a>
+                &nbsp;    &nbsp;
+                @await Html.PartialAsync("_LoginPartial")
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <a class="nav-link text-light" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin</a>
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminImagens" asp-action="Index">Gerenciamentos de imagens</a>
                     &nbsp;    &nbsp;
-                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminLanches" asp-action="Index">Lanches</a>
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminRelatorioVendas" asp-action="Index">Relatório de vendas</a>
+                    &nbsp;    &nbsp;
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminPedidos" asp-action="Index">Pedidos</a>
                     &nbsp;    &nbsp;
                     <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminCategorias" asp-action="Index">Categorias</a>
                     &nbsp;    &nbsp;
-                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminPedidos" asp-action="Index">Pedidos</a>
-                    &nbsp;    &nbsp; 
-                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminRelatorioVendas" asp-action="Index">Relatório de vendas</a>
-                    &nbsp;    &nbsp;
-                    @await Html.PartialAsync("_LoginPartial")
+                    <a class="nav-link text-light" asp-area="Admin" asp-controller="AdminLanches" asp-action="Index">Lanches</a>
                 </div>
             </div>
         </nav>
