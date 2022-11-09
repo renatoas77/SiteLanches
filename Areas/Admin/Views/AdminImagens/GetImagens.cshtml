@@ -11,7 +11,7 @@
     <div class="row">
         @foreach(FileInfo file in Model.Files)
         {
-            <div class="column">
+            <div class="col-2">
                 <img src="~/@caminho/@file.Name" width="125" height="125" title="@file.Name" asp-append-version=true>
                 <div style="padding:10px;text-align:left">
                     <a href="@Url.Action("Deletefile","AdminImagens",new {fname=file.Name})">Deletar</a>
@@ -23,3 +23,7 @@
 else{
     <h1>Nenhum arquivo encontrado na pasta: @Model.PathImagesProdutos</h1>
 }
+
+<div>
+    <a class="btn btn-outline-info" asp-area="Admin" asp-controller="AdminImagens" asp-action="Index">Voltar a pagina anterior</a>
+</div>
