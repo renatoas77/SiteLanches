@@ -1,0 +1,49 @@
+﻿<title>
+    @ViewData["Title"] - Grafico de Vendas
+</title>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(CarregaDados);
+
+    function CarregaDados() {
+        $.ajax({
+            url: '@Url.Action("VendasLanches", "AdminGrafico")',
+            data: {dias: 30},
+            dataType: "json",
+            type: "GET",
+            error: function(xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                toastr.error(err.message);
+            },
+            success: function(data) {
+                GraficoVendasLanches(data);
+                return false;
+            }
+        });
+        return false;
+    }
+
+    function GraficoVendasLanches(data) {
+        var dataArray = [
+            ['Lanches', 'Quantidade' , 'Valor(R$)']
+        ];
+        $.each(data, function(i, item) {
+            dataArray.push([item.lancheNome, item.lanchesQuantidade, item.valorTotalLanche]);
+        });
+        var data = google.visualization.arrayToDataTable(dataArray);
+         var options = {
+          chart: {
+            title: 'Venda de lanches',
+            subtitle: 'Ultimos 30 dias',}
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+</script>
+
+<div id="columnchart_material" style="width: 800px; height: 500px;"></div>

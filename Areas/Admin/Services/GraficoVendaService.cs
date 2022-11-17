@@ -20,7 +20,7 @@ namespace LanchesMac.Areas.Admin.Services
                            join l in _appDbContext.Lanches
                            on pd.LancheId equals l.LancheId
                            where pd.Pedido.PedidoEnviado >= data
-                           group pd by new { pd.LancheId, l.Nome, pd.Quantidade } into g
+                           group pd by new {l.Nome } into g
                            select new
                            {
                                LancheNome= g.Key.Nome,

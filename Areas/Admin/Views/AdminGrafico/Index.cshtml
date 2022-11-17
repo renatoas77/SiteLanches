@@ -1,0 +1,52 @@
+﻿<title>
+    @ViewData["Title"] - Grafico de Vendas
+</title>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(CarregaDados);
+
+    function CarregaDados() {
+        $.ajax({
+            url: '@Url.Action("VendasLanches", "AdminGrafico")',
+            data: {dias: 360},
+            dataType: "json",
+            type: "GET",
+            error: function(xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                toastr.error(err.message);
+            },
+            success: function(data) {
+                GraficoVendasLanches(data);
+                return false;
+            }
+        });
+        return false;
+    }
+
+    function GraficoVendasLanches(data) {
+        var dataArray = [
+            ['Lanches', 'Quantidade' , 'Valor(R$)']
+        ];
+        $.each(data, function(i, item) {
+            dataArray.push([item.lancheNome, item.lanchesQuantidade, item.valorTotalLanche]);
+        });
+        var data = google.visualization.arrayToDataTable(dataArray);
+         var options = {
+            title: 'Venda de lanches nos ultimos 360 dias',
+            animation :{
+                duration: 3000,
+                easing: 'in',
+                startup: true
+            },
+        };
+
+         var chart = new google.visualization.SteppedAreaChart(document.getElementById('chart_div'));
+
+         chart.draw(data, options);
+    }
+</script>
+
+<div id="chart_div" style="width: 800px; height: 500px;"></div>
