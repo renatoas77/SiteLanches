@@ -1,3 +1,4 @@
+using FastReport.Data;
 using LanchesMac.Areas.Admin.Services;
 using LanchesMac.Context;
 using LanchesMac.Models;
@@ -23,6 +24,8 @@ builder.Services.AddPaging(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+FastReport.Utils.RegisteredObjects.AddConnection(typeof(MsSqlDataConnection));
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
@@ -46,6 +49,7 @@ builder.Services.AddTransient<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
 builder.Services.AddScoped<RelatorioVendasService>();
 builder.Services.AddScoped<GraficoVendaService>();
+builder.Services.AddScoped<RelatorioLanchesService>();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -83,6 +87,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseFastReport();
 
 app.UseRouting();
 app.UseSession();

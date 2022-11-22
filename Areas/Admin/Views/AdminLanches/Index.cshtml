@@ -8,10 +8,12 @@
 
 <form method="get" class="form-inline">
     <input name="filter" class="form-control" placeholder="Buscar lanche" value="@Model.RouteValue["filter"]" />
-    <br/>
-    <button type="submit" class="btn btn-info"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-</svg> Procurar</button>
+    <br />
+    <button type="submit" class="btn btn-info">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+        </svg> Procurar
+    </button>
 </form>
 
 Total de lanches: @Model.TotalRecordCount
@@ -19,9 +21,11 @@ Total de lanches: @Model.TotalRecordCount
     <vc:pager paging-list="@Model"></vc:pager>
 </div>
 
-<p>
-    <a asp-action="Create">Criar lanche</a>
-</p>
+<div class="row">
+    <div class="col-md-12">
+        <a asp-action="Create">Criar lanche</a> | <a asp-controller="AdminLanchesReport" asp-action="LanchesCategoriaReport">Relatorio de lanches</a> | <a asp-controller="AdminLanchesReport" asp-action="LanchesCategoriaPDF">Gerar relatorio PDF</a>
+    </div>
+</div>
 
 <table class="table">
     <thead>
@@ -63,7 +67,7 @@ Total de lanches: @Model.TotalRecordCount
                 <td>
                     @Html.DisplayFor(modelItem => item.Categoria.CategoriaNome)
                 </td>
-                <td >
+                <td>
                     <a asp-action="Edit" asp-route-id="@item.LancheId">Editar</a> |
                     <a asp-action="Details" asp-route-id="@item.LancheId">Detalhes</a> |
                     <a asp-action="Delete" asp-route-id="@item.LancheId">Deletar</a>
