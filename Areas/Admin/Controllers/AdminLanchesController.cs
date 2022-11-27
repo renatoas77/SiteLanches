@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using LanchesMac.Context;
 using LanchesMac.Models;
 using Microsoft.AspNetCore.Authorization;
 using ReflectionIT.Mvc.Paging;
+using LanchesMac.ViewModels;
 
 namespace LanchesMac.Areas.Admin.Controllers
 {
@@ -17,18 +19,29 @@ namespace LanchesMac.Areas.Admin.Controllers
     public class AdminLanchesController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AdminLanchesController(AppDbContext context)
+        public AdminLanchesController(AppDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        //// GET: Admin/AdminLanches
-        //public async Task<IActionResult> Index()
-        //{
-        //    var appDbContext = _context.Lanches.Include(l => l.Categoria);
-        //    return View(await appDbContext.ToListAsync());
-        //}
+        private string ProcessaUploadedFile(IFormFile image)
+        {
+            string nomeArquivoImagem = null;
+            if (image != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "produtos");
+                nomeArquivoImagem = Guid.NewGuid().ToString() + "_" + image.FileName;
+                string filePath = Path.Combine(uploadsFolder, nomeArquivoImagem);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    image.CopyTo(fileStream);
+                }
+            }
+            return nomeArquivoImagem;
+        }
 
         public async Task<IActionResult> Index(string filter, int pageindex = 1, string sort = "Nome")
         {
@@ -76,16 +89,21 @@ namespace LanchesMac.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LancheId,Nome,DescricaoCurta,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsLanchePreferido,EmEstoque,CategoriaId")] Lanche lanche)
+        public async Task<IActionResult> Create([Bind("LancheId,Nome,DescricaoCurta,DescricaoDetalhada,Preco,Imagem,ImagemThumbnail,IsLanchePreferido,EmEstoque,CategoriaId")] LancheViewModel model)
         {
             if (ModelState.IsValid)
             {
+                model.ImagemExistente = ProcessaUploadedFile(model.Imagem);
+                model.ThumbnailExistente = ProcessaUploadedFile(model.ImagemThumbnail);
+
+                Lanche lanche = new Lanche(model);
+                
                 _context.Add(lanche);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaNome", lanche.CategoriaId);
-            return View(lanche);
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaNome", model.CategoriaId);
+            return View(model);
         }
 
         // GET: Admin/AdminLanches/Edit/5
@@ -97,12 +115,15 @@ namespace LanchesMac.Areas.Admin.Controllers
             }
 
             var lanche = await _context.Lanches.FindAsync(id);
+
+            var model = new LancheViewModel(lanche);
+
             if (lanche == null)
             {
                 return NotFound();
             }
             ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaNome", lanche.CategoriaId);
-            return View(lanche);
+            return View(model);
         }
 
         // POST: Admin/AdminLanches/Edit/5
@@ -110,9 +131,9 @@ namespace LanchesMac.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LancheId,Nome,DescricaoCurta,DescricaoDetalhada,Preco,ImagemUrl,ImagemThumbnailUrl,IsLanchePreferido,EmEstoque,CategoriaId")] Lanche lanche)
+        public async Task<IActionResult> Edit(int id, LancheViewModel model)
         {
-            if (id != lanche.LancheId)
+            if (id != model.LancheId)
             {
                 return NotFound();
             }
@@ -121,11 +142,44 @@ namespace LanchesMac.Areas.Admin.Controllers
             {
                 try
                 {
+                    var lanche = await _context.Lanches.FindAsync(model.LancheId);
+
+                    lanche.Nome = model.Nome;
+                    lanche.DescricaoCurta = model.DescricaoCurta;
+                    lanche.DescricaoDetalhada = model.DescricaoDetalhada;
+                    lanche.Preco = model.Preco;
+                    lanche.IsLanchePreferido = model.IsLanchePreferido;
+                    lanche.EmEstoque = model.EmEstoque;
+                    lanche.CategoriaId = model.CategoriaId;
+
+                    if (model.Imagem != null)
+                    {
+                        if (lanche.ImagemUrl != null)
+                        {
+                            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "produtos", lanche.ImagemUrl);
+                            System.IO.File.Delete(filePath);
+                        }
+                        lanche.ImagemUrl = ProcessaUploadedFile(model.Imagem);
+                    }
+
+                    if (model.ImagemThumbnail != null)
+                    {
+                        if (lanche.ImagemThumbnailUrl != null)
+                        {
+                            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "produtos", lanche.ImagemThumbnailUrl);
+                            System.IO.File.Delete(filePath);
+                        }
+                        lanche.ImagemThumbnailUrl = ProcessaUploadedFile(model.ImagemThumbnail);
+                    }
+
+
                     _context.Update(lanche);
                     await _context.SaveChangesAsync();
+                    model = new LancheViewModel(lanche);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    var lanche = await _context.Lanches.FindAsync(model.LancheId);
                     if (!LancheExists(lanche.LancheId))
                     {
                         return NotFound();
@@ -137,8 +191,8 @@ namespace LanchesMac.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaNome", lanche.CategoriaId);
-            return View(lanche);
+            ViewData["CategoriaId"] = new SelectList(_context.Categorias, "CategoriaId", "CategoriaNome", model.CategoriaId);
+            return View(model);
         }
 
         // GET: Admin/AdminLanches/Delete/5
@@ -175,7 +229,21 @@ namespace LanchesMac.Areas.Admin.Controllers
                 _context.Lanches.Remove(lanche);
             }
 
-            await _context.SaveChangesAsync();
+            if(await _context.SaveChangesAsync() > 0)
+            {
+                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "produtos", lanche.ImagemUrl);
+                if(System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                filePath = Path.Combine(_webHostEnvironment.WebRootPath, "produtos", lanche.ImagemThumbnailUrl);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            };
+
             return RedirectToAction(nameof(Index));
         }
 

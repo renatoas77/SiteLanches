@@ -1,13 +1,11 @@
-﻿using LanchesMac.ViewModels;
+﻿using LanchesMac.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LanchesMac.Models
+namespace LanchesMac.ViewModels
 {
-    [Table("Lanches")]
-    public class Lanche
+    public class LancheViewModel
     {
-        [Key]
         public int LancheId { get; set; }
 
         [Required(ErrorMessage = "Este campo não pode ficar em branco")]
@@ -31,44 +29,46 @@ namespace LanchesMac.Models
         [Range(1, 999.99, ErrorMessage = "O preço deve estar entre R$1 e R$999,99 ")]
         public decimal Preco { get; set; }
 
-        [Display(Name ="Imagem do lanche")]
-        [StringLength(300,ErrorMessage = "Maximo de {1} caracteres")]
-        public string ImagemUrl { get; set; }
+        [Required]
+        [Display(Name = "Foto")]
+        public IFormFile Imagem { get; set; }
 
-        [Display(Name = "Imagem miniatura do lanche")]
-        [StringLength(300, ErrorMessage = "Maximo de {1} caracteres")]
-        public string ImagemThumbnailUrl { get; set; }
+        [Required]
+        [Display(Name = "Thumbnail")]
+        public IFormFile ImagemThumbnail { get; set; }
+
+       
 
         [Display(Name = "É um lanche preferido?")]
         public bool IsLanchePreferido { get; set; }
 
         [Display(Name = "Tem em estoque?")]
         public bool EmEstoque { get; set; }
-
-
         public int CategoriaId { get; set; }
 
+        public string ImagemExistente { get; set; }
 
+        public string ThumbnailExistente { get; set; }
         public virtual Categoria Categoria { get; set; }
 
-        public Lanche()
+        public LancheViewModel()
         {
 
         }
 
-        public Lanche(LancheViewModel model)
+        public LancheViewModel(Lanche lanche)
         {
-            LancheId = model.LancheId;
-            Nome = model.Nome;
-            DescricaoCurta = model.DescricaoCurta;
-            DescricaoDetalhada = model.DescricaoDetalhada;
-            Preco = model.Preco;
-            ImagemUrl = model.ImagemExistente;
-            ImagemThumbnailUrl = model.ThumbnailExistente;
-            IsLanchePreferido = model.IsLanchePreferido;
-            EmEstoque = model.EmEstoque;
-            CategoriaId = model.CategoriaId;
-            Categoria = model.Categoria;
+            LancheId = lanche.LancheId;
+            Nome = lanche.Nome;
+            DescricaoCurta = lanche.DescricaoCurta;
+            DescricaoDetalhada = lanche.DescricaoDetalhada;
+            Preco = lanche.Preco;
+            ImagemExistente = lanche.ImagemUrl;
+            ThumbnailExistente = lanche.ImagemThumbnailUrl;
+            IsLanchePreferido = lanche.IsLanchePreferido;
+            EmEstoque = lanche.EmEstoque;
+            CategoriaId = lanche.CategoriaId;
+            Categoria = lanche.Categoria;
         }
     }
 }

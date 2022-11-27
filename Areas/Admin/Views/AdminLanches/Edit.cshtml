@@ -1,4 +1,4 @@
-﻿@model LanchesMac.Models.Lanche
+﻿@model LanchesMac.ViewModels.LancheViewModel
 
 @{
     ViewData["Title"] = "Editar ";
@@ -7,7 +7,7 @@
 <h1>Editar lanche</h1>
 
 <hr />
-<form asp-action="Edit" role="form">
+<form method="post" enctype="multipart/form-data" asp-action="Edit">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="LancheId" />
     <div class="form-group">
@@ -25,34 +25,39 @@
         <textarea asp-for="DescricaoDetalhada" class="form-control"></textarea>
         <span asp-validation-for="DescricaoDetalhada" class="text-danger"></span>
     </div>
-    <div class="row">
+    <div class="form-group">
         <div class="form-group col-md-1">
             <label asp-for="Preco" class="control-label"></label>
             <input asp-for="Preco" class="form-control" />
             <span asp-validation-for="Preco" class="text-danger"></span>
         </div>
     </div>
-    <div class="row">
+    <div class="form-group">
         <div class="form-group col-md-6">
-            <label asp-for="ImagemUrl" class="control-label"></label>
-            <input asp-for="ImagemUrl" class="form-control" />
-            <span asp-validation-for="ImagemUrl" class="text-danger"></span>
+            <label asp-for="Imagem" class="control-label"></label>
+            <div class="custom-file">
+                <input asp-for="Imagem" class="custom-file-input" />
+                <label class="custom-file-label" for="customFile">Escolha A Foto</label>
+            </div>
+            <span asp-validation-for="Imagem" class="text-danger"></span>
+            <img src="~/produtos/@Model.ImagemExistente" class="img-thumbnail" height="80" width="80" asp-append-version="true" />
         </div>
         <div class="form-group col-md-6">
-            <img src="@Model.ImagemUrl" width="500" height="300" />
+            <img src="~/produtos/@Model.ImagemExistente" width="500" height="300" />
         </div>
     </div>
-    <div class="row">
-        <div class="form-group col-md-6">
-            <label asp-for="ImagemThumbnailUrl" class="control-label"></label>
-            <input asp-for="ImagemThumbnailUrl" class="form-control" />
-            <span asp-validation-for="ImagemThumbnailUrl" class="text-danger"></span>
+    <div class="form-group col-md-6">
+        <label asp-for="ImagemThumbnail" class="control-label"></label>
+        <div class="custom-file">
+            <input asp-for="ImagemThumbnail" class="custom-file-input" />
+            <label class="custom-file-label" for="customFile">Escolha A Foto</label>
         </div>
-        <div class="form-group col-md-3">
-            <img src="@Model.ImagemThumbnailUrl" width="250" height="150" />
-        </div>
+        <span asp-validation-for="ImagemThumbnail" class="text-danger"></span>
+        <img src="~/produtos/@Model.ThumbnailExistente" class="img-thumbnail" height="80" width="80" asp-append-version="true" />
     </div>
-
+    <div class="form-group col-md-6">
+        <img src="~/produtos/@Model.ThumbnailExistente" width="500" height="300" />
+    </div>
     <div class="row">
         <div class="form-group col-sm-4">
             <label class="control-label">Marcar como Preferido?</label>
